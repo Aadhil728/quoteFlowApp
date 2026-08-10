@@ -36,3 +36,9 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Immutable acceptance/rejection snapshots with content hashes, printed-name evidence, explicit terms acceptance, decision timestamps, and privacy-conscious request evidence.
 - Public-document protections including noindex/noarchive, no-referrer, no-store caching, frame denial, and per-token/IP throttling.
 - Phase 4 public-link, selection, comment, revision, acceptance, PDF, rotation, revocation, and rate-limit coverage, bringing the suite to 30 tests and 159 assertions.
+- Phase 5 accepted-quotation conversion into immutable deposit or full invoices with sequential numbering, tenant isolation, finance permissions, invoice directory/detail screens, and accepted-snapshot provenance.
+- Manual payment recording, partial/paid balance transitions, immutable sequential receipts, overpayment protection, audit events, and invoice reconciliation.
+- Reusable accessible searchable-select control with the complete current ISO 4217 catalogue, searchable by code, currency, and country.
+- Royal Indigo application theme and workspace-brand default, including migration of the previous default color.
+- Contract-backed Stripe Checkout and PayPal Orders adapters with environment-only credentials, verified webhook normalization, provider-scoped idempotency, failure/refund handling, and the rule that browser redirects never settle invoices.
+- Phase 5 finance, authorization, isolation, webhook-signature, idempotency, receipt, and reconciliation coverage, bringing the suite to 40 tests and 209 assertions.

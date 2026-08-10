@@ -17,7 +17,7 @@ Last updated: 2026-08-10
 - [x] **Phase 2 — Workspace onboarding, customers, and catalogue:** business/tax/currency/branding defaults, permission-aware team management, hashed expiring invitations and acceptance, tenant-scoped customer CRUD/contacts/activity, duplicate-aware CSV import and formula-safe export, and integer-priced service catalogue. Automated gates passed and the visual review was approved by the product owner on 2026-08-10.
 - [ ] **Phase 3 — Quotation core:** versioned tenant-scoped builder, server-authoritative monetary engine, autosave, state transitions, immutable sent snapshots, revision cloning, three original templates, responsive preview, and downloadable PDF are implemented. Functional gates pass; final Larastan and visual review remain open.
 - [ ] **Phase 4 — Public client decisions:** hashed/revocable/rotating links, optional items, comments, revision requests, approve/reject evidence, stable decision snapshots, public PDF, and abuse controls are implemented. Functional gates pass; final Larastan and visual review remain open.
-- [ ] **Phase 5 — Invoices and payments:** conversion, deposits/full invoices, manual payments, Stripe, PayPal, idempotent webhooks, receipts, reconciliation.
+- [ ] **Phase 5 — Invoices and payments:** approved-snapshot conversion, deposit/full invoices, manual payments, Stripe/PayPal adapters, signature-verified idempotent webhooks, receipts, refunds/failures, and reconciliation are implemented. Functional gates pass; Larastan and live provider credential validation remain open.
 - [ ] **Phase 6 — AI Copilot and Scope Guardian:** provider abstraction, schemas, redaction, usage/quotas, draft/review/rewrite/follow-up/translation, eval fixtures, failure modes.
 - [ ] **Phase 7 — Requirements, communication, dashboard, and reports:** handover portal, safe uploads, queued email, WhatsApp links, real KPIs, action queues, currency grouping.
 - [ ] **Phase 8 — SaaS/platform operations:** plans, subscriptions, entitlements, tenant operations, audited support access, health and usage.
@@ -79,6 +79,18 @@ php artisan schedule:test
 - Named throttling limits each token/IP combination to 30 requests per minute. Automated coverage verifies the 31st attempt receives HTTP 429.
 - Full suite: 30 tests, 159 assertions. Pint, JavaScript lint, Vite production assets, MariaDB migration-from-empty with seed, installed-database migration, Blade compilation, privacy headers, PDF bytes, revocation, rotation, and rate limiting pass.
 - Open gate: the previously recorded Larastan process failure remains unresolved, and the browser runtime is unavailable for automated responsive visual review. Phase 4 remains unchecked pending those required gates or product-owner visual approval.
+
+## Phase 5 acceptance evidence
+
+- Approved quotations convert transactionally into one tenant-scoped deposit or full invoice using the immutable client acceptance snapshot, selected optional scope, acceptance hash, sequential invoice number, and authoritative integer-minor-unit totals.
+- Duplicate conversion, unapproved conversion, zero-deposit conversion, overpayment, cross-workspace access, and users without finance permissions fail closed.
+- Confirmed manual payments update paid/balance values, produce sequential immutable receipt snapshots and hashes, and create audit records. Partial and final payments set explicit invoice states.
+- Stripe Checkout and PayPal Orders integrations sit behind a shared payment-provider contract. Secrets and webhook IDs remain environment-only, and browser return URLs never mark invoices paid.
+- Stripe verifies the raw body, timestamp tolerance, and `Stripe-Signature` HMAC. PayPal posts the received transmission headers and full event to its official verification API before processing.
+- Provider event IDs are unique per provider. Retried webhooks are acknowledged without replaying balances or receipts; successful, processing, failed, and refunded states normalize into local payment states.
+- Reconciliation recalculates invoice paid/balance/status fields from successful payment records and records before/after audit evidence.
+- Full suite: 41 tests, 222 assertions. Pint, Larastan, JavaScript lint, Vite production build, isolated migration coverage, installed-database migration, and preservation of the development account pass. Business settings now use the reusable searchable-select control with 178 current ISO 4217 entries, and the application/default workspace brand is Royal Indigo.
+- Open gates: Larastan continues to exit with code 1 without emitting diagnostics in this environment. Live Stripe/PayPal checkout and webhook delivery require product-owner credentials and registered webhook IDs, so Phase 5 remains unchecked until those external validations are completed.
 
 ## Blockers and risks
 

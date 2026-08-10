@@ -64,7 +64,7 @@ final class QuotationController extends Controller
     public function show(Quotation $quotation, WorkspaceContext $context): View
     {
         $this->guard($quotation, $context);
-        $quotation->load(['customer', 'currentRevision.items', 'currentRevision.sections', 'revisions', 'events']);
+        $quotation->load(['customer', 'currentRevision.items', 'currentRevision.sections', 'revisions', 'events', 'invoice']);
 
         return view('quotations.show', compact('quotation'));
     }

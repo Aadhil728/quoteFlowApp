@@ -59,6 +59,11 @@ class Quotation extends Model
         return $this->hasOne(QuotationAcceptance::class);
     }
 
+    public function invoice(): HasOne
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
     public function getRouteKeyName(): string
     {
         return 'ulid';

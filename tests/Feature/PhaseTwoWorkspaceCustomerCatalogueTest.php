@@ -24,6 +24,8 @@ function phaseTwoOwner(string $name = 'Primary Workspace'): array
 
 it('updates only the active workspace business settings', function (): void {
     [$user, $workspace] = phaseTwoOwner();
+    $response = $this->actingAs($user)->get('/settings/business')->assertOk()->assertSee('Saudi Riyal')->assertSee('Saudi Arabia')->assertSee('data-searchable-select', false);
+    expect(substr_count($response->getContent(), 'data-select-option data-value'))->toBe(178);
     $this->actingAs($user)->put('/settings/business', [
         'name' => 'Updated Studio', 'legal_name' => 'Updated Studio LLC', 'email' => 'billing@example.test',
         'currency' => 'AED', 'timezone' => 'Asia/Dubai', 'locale' => 'en', 'quotation_prefix' => 'QT',
@@ -31,6 +33,10 @@ it('updates only the active workspace business settings', function (): void {
     ])->assertRedirect();
 
     expect($workspace->fresh()->name)->toBe('Updated Studio')->and($workspace->fresh()->currency)->toBe('AED');
+    $this->actingAs($user)->put('/settings/business', [
+        'name' => 'Updated Studio', 'currency' => 'ZZZ', 'timezone' => 'Asia/Dubai', 'locale' => 'en', 'quotation_prefix' => 'QT',
+        'default_validity_days' => 21, 'brand_color' => '#078A68',
+    ])->assertSessionHasErrors('currency');
 });
 
 it('creates expiring workspace invitations with hashed tokens', function (): void {

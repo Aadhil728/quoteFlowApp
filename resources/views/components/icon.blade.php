@@ -3,6 +3,7 @@
 $paths = [
     'dashboard' => '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
     'quote' => '<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h8M9 17h6"/>',
+    'invoice' => '<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 12h8M9 16h8M9 20h5"/>',
     'template' => '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 3v18M8 9h13"/>',
     'users' => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
     'customer' => '<rect x="3" y="4" width="18" height="17" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7 21v-1a5 5 0 0 1 10 0v1M9 4V2h6v2"/>',

@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias(['workspace' => ResolveWorkspace::class, 'workspace.permission' => RequireWorkspacePermission::class, 'public.document' => SecurePublicDocument::class]);
+        $middleware->validateCsrfTokens(except: ['webhooks/payments/*']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

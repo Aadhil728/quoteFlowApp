@@ -26,6 +26,9 @@
                 <a class="nav-item {{ request()->routeIs('quotations.*') ? 'active' : '' }}" href="{{ route('quotations.index') }}" title="Quotations"><x-icon name="quote" /><i>Quotations</i></a>
                 <a class="nav-item {{ request()->routeIs('templates.*') ? 'active' : '' }}" href="{{ route('templates.index') }}" title="Templates"><x-icon name="template" /><i>Templates</i></a>
             @endif
+            @if(auth()->user()->canInWorkspace($activeWorkspace,'invoices.view'))
+                <a class="nav-item {{ request()->routeIs('invoices.*') ? 'active' : '' }}" href="{{ route('invoices.index') }}" title="Invoices"><x-icon name="invoice" /><i>Invoices</i></a>
+            @endif
             @if(auth()->user()->canInWorkspace($activeWorkspace,'customers.view'))
                 <a class="nav-item {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}" title="Customers"><x-icon name="customer" /><i>Customers</i></a>
             @endif

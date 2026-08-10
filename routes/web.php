@@ -3,6 +3,8 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InstallerController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\PublicQuotationController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\ServiceController;
@@ -16,6 +18,7 @@ Route::get('/install', [InstallerController::class, 'show'])->name('install');
 Route::post('/install', [InstallerController::class, 'store'])->middleware('throttle:10,1');
 Route::get('/invitations/{token}', [InvitationController::class, 'show'])->name('invitations.show');
 Route::post('/invitations/{token}/accept', [InvitationController::class, 'accept'])->middleware(['auth', 'verified', 'throttle:10,1'])->name('invitations.accept');
+Route::post('/webhooks/payments/{provider}', PaymentWebhookController::class)->whereIn('provider', ['stripe', 'paypal'])->middleware('throttle:120,1')->name('payments.webhook');
 Route::prefix('q/{token}')->middleware(['throttle:public-quotation', 'public.document'])->group(function (): void {
     Route::get('/', [PublicQuotationController::class, 'show'])->name('public.quotation.show');
     Route::get('/pdf', [PublicQuotationController::class, 'pdf'])->name('public.quotation.pdf');
@@ -58,6 +61,12 @@ Route::middleware(['auth', 'verified', 'workspace'])->group(function (): void {
     Route::post('/quotations/{quotation}/revise', [QuotationController::class, 'revise'])->middleware('workspace.permission:quotations.manage')->name('quotations.revise');
     Route::post('/quotations/{quotation}/share', [QuotationController::class, 'share'])->middleware('workspace.permission:quotations.manage')->name('quotations.share');
     Route::delete('/quotations/{quotation}/public-links', [QuotationController::class, 'revokePublicLinks'])->middleware('workspace.permission:quotations.manage')->name('quotations.public-links.revoke');
+    Route::post('/quotations/{quotation}/invoice', [InvoiceController::class, 'convert'])->middleware('workspace.permission:invoices.manage')->name('invoices.convert');
+    Route::get('/invoices', [InvoiceController::class, 'index'])->middleware('workspace.permission:invoices.view')->name('invoices.index');
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->middleware('workspace.permission:invoices.view')->name('invoices.show');
+    Route::post('/invoices/{invoice}/manual-payments', [InvoiceController::class, 'recordManualPayment'])->middleware('workspace.permission:payments.manage')->name('invoices.payments.manual');
+    Route::post('/invoices/{invoice}/checkout', [InvoiceController::class, 'checkout'])->middleware('workspace.permission:payments.manage')->name('invoices.checkout');
+    Route::post('/invoices/{invoice}/reconcile', [InvoiceController::class, 'reconcile'])->middleware('workspace.permission:payments.manage')->name('invoices.reconcile');
     Route::get('/templates', [TemplateController::class, 'index'])->middleware('workspace.permission:quotations.view')->name('templates.index');
     Route::get('/templates/{template}', [TemplateController::class, 'preview'])->middleware('workspace.permission:quotations.view')->name('templates.preview');
     Route::post('/templates/{template}/duplicate', [TemplateController::class, 'duplicate'])->middleware('workspace.permission:quotations.manage')->name('templates.duplicate');

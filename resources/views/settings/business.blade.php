@@ -1,1 +1,38 @@
-<x-layouts.app title="Business settings"><div class="page-head"><div><p class="eyebrow">Workspace settings</p><h1>Business profile</h1><p>Defaults used across quotations, invoices, emails, and public pages.</p></div></div><form class="form-card" method="POST" action="{{ url('/settings/business') }}">@csrf @method('PUT')<div class="form-grid"><label>Display name<input name="name" value="{{ old('name',$workspace->name) }}" required></label><label>Legal name<input name="legal_name" value="{{ old('legal_name',$workspace->legal_name) }}"></label><label>Business email<input type="email" name="email" value="{{ old('email',$workspace->email) }}"></label><label>Phone<input name="phone" value="{{ old('phone',$workspace->phone) }}"></label><label>Tax ID<input name="tax_id" value="{{ old('tax_id',$workspace->tax_id) }}"></label><label>Currency<input name="currency" maxlength="3" value="{{ old('currency',$workspace->currency) }}" required></label><label>Timezone<input name="timezone" value="{{ old('timezone',$workspace->timezone) }}" required></label><label>Locale<input name="locale" value="{{ old('locale',$workspace->locale) }}" required></label><label>Quotation prefix<input name="quotation_prefix" value="{{ old('quotation_prefix',$workspace->quotation_prefix) }}" required></label><label>Default validity days<input type="number" min="1" max="365" name="default_validity_days" value="{{ old('default_validity_days',$workspace->default_validity_days) }}" required></label><label>Brand color<input type="color" name="brand_color" value="{{ old('brand_color',$workspace->brand_color) }}" required></label><label class="span-2">Business address<textarea name="address">{{ old('address',$workspace->address) }}</textarea></label><label class="span-2">Payment instructions<textarea name="payment_instructions">{{ old('payment_instructions',$workspace->payment_instructions) }}</textarea></label></div><div class="form-actions"><button class="button primary">Save business profile</button></div></form></x-layouts.app>
+<x-layouts.app title="Business settings">
+    <div class="page-head">
+        <div>
+            <p class="eyebrow">Workspace settings</p>
+            <h1>Business profile</h1>
+            <p>Defaults used across quotations, invoices, emails, and public pages.</p>
+        </div>
+    </div>
+    <form class="form-card" method="POST" action="{{ url('/settings/business') }}">
+        @csrf
+        @method('PUT')
+        <div class="form-grid">
+            <label>Display name<input name="name" value="{{ old('name', $workspace->name) }}" required></label>
+            <label>Legal name<input name="legal_name" value="{{ old('legal_name', $workspace->legal_name) }}"></label>
+            <label>Business email<input type="email" name="email" value="{{ old('email', $workspace->email) }}"></label>
+            <label>Phone<input name="phone" value="{{ old('phone', $workspace->phone) }}"></label>
+            <label>Tax ID<input name="tax_id" value="{{ old('tax_id', $workspace->tax_id) }}"></label>
+            <x-searchable-select
+                name="currency"
+                label="Currency"
+                :options="$currencies"
+                :value="old('currency', $workspace->currency)"
+                placeholder="Select a currency"
+                search-placeholder="Search country, currency, or code..."
+                helper="All current ISO 4217 currency and fund codes."
+                required
+            />
+            <label>Timezone<input name="timezone" value="{{ old('timezone', $workspace->timezone) }}" required></label>
+            <label>Locale<input name="locale" value="{{ old('locale', $workspace->locale) }}" required></label>
+            <label>Quotation prefix<input name="quotation_prefix" value="{{ old('quotation_prefix', $workspace->quotation_prefix) }}" required></label>
+            <label>Default validity days<input type="number" min="1" max="365" name="default_validity_days" value="{{ old('default_validity_days', $workspace->default_validity_days) }}" required></label>
+            <label>Brand color<input type="color" name="brand_color" value="{{ old('brand_color', $workspace->brand_color) }}" required></label>
+            <label class="span-2">Business address<textarea name="address">{{ old('address', $workspace->address) }}</textarea></label>
+            <label class="span-2">Payment instructions<textarea name="payment_instructions">{{ old('payment_instructions', $workspace->payment_instructions) }}</textarea></label>
+        </div>
+        <div class="form-actions"><button class="button primary">Save business profile</button></div>
+    </form>
+</x-layouts.app>

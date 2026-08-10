@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Contracts\PdfRenderer;
+use App\Infrastructure\Payments\PayPalGateway;
+use App\Infrastructure\Payments\StripeGateway;
 use App\Infrastructure\Pdf\DompdfRenderer;
+use App\Support\PaymentGatewayRegistry;
 use App\Support\WorkspaceContext;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -19,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->scoped(WorkspaceContext::class);
         $this->app->bind(PdfRenderer::class, DompdfRenderer::class);
+        $this->app->singleton(PaymentGatewayRegistry::class, fn ($app) => new PaymentGatewayRegistry([$app->make(StripeGateway::class), $app->make(PayPalGateway::class)]));
     }
 
     /**
